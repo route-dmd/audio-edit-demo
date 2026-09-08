@@ -80,8 +80,7 @@ var DEMO_DATA = [
             "input": "audio/q09_in.wav",
             "student": "audio/q09_a.wav",
             "teacher": "audio/q09_b.wav"
-          },
-          null
+          }
         ]
       }
     ]
@@ -99,8 +98,7 @@ var DEMO_DATA = [
             "input": "audio/q04_in.wav",
             "student": "audio/q04_a.wav",
             "teacher": "audio/q04_b.wav"
-          },
-          null
+          }
         ]
       },
       {
@@ -113,8 +111,7 @@ var DEMO_DATA = [
             "input": "audio/q13_in.wav",
             "student": "audio/q13_b.wav",
             "teacher": "audio/q13_a.wav"
-          },
-          null
+          }
         ]
       },
       {
@@ -127,8 +124,7 @@ var DEMO_DATA = [
             "input": "audio/q14_in.wav",
             "student": "audio/q14_b.wav",
             "teacher": "audio/q14_a.wav"
-          },
-          null
+          }
         ]
       },
       {
@@ -141,8 +137,7 @@ var DEMO_DATA = [
             "input": "audio/q15_in.wav",
             "student": "audio/q15_b.wav",
             "teacher": "audio/q15_a.wav"
-          },
-          null
+          }
         ]
       }
     ]
@@ -160,22 +155,7 @@ var DEMO_DATA = [
             "input": "audio/q10_in.wav",
             "student": "audio/q10_a.wav",
             "teacher": "audio/q10_b.wav"
-          },
-          null
-        ]
-      },
-      {
-        "task": "Pitch Edit",
-        "examples": [
-          null,
-          null
-        ]
-      },
-      {
-        "task": "Energy Edit",
-        "examples": [
-          null,
-          null
+          }
         ]
       },
       {
@@ -188,8 +168,7 @@ var DEMO_DATA = [
             "input": "audio/q16_in.wav",
             "student": "audio/q16_a.wav",
             "teacher": "audio/q16_b.wav"
-          },
-          null
+          }
         ]
       }
     ]
@@ -207,15 +186,7 @@ var DEMO_DATA = [
             "input": "audio/q12_in.wav",
             "student": "audio/q12_b.wav",
             "teacher": "audio/q12_a.wav"
-          },
-          null
-        ]
-      },
-      {
-        "task": "Improve Quality",
-        "examples": [
-          null,
-          null
+          }
         ]
       },
       {
@@ -228,8 +199,7 @@ var DEMO_DATA = [
             "input": "audio/q08_in.wav",
             "student": "audio/q08_a.wav",
             "teacher": "audio/q08_b.wav"
-          },
-          null
+          }
         ]
       },
       {
@@ -242,8 +212,7 @@ var DEMO_DATA = [
             "input": "audio/q11_in.wav",
             "student": "audio/q11_a.wav",
             "teacher": "audio/q11_b.wav"
-          },
-          null
+          }
         ]
       }
     ]

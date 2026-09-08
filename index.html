@@ -106,8 +106,8 @@
   <section id="demos">
     <h2>Demos</h2>
     <p style="color:var(--muted);font-size:15px;margin-top:0">
-      Student (4-step Route-DMD) vs. 32-step teacher across 16 task types. The input audio is shown
-      for reference and is not a system output. Samples marked "coming soon" are being prepared.
+      Student (4-step Route-DMD) vs. 32-step teacher. The input audio is shown
+      for reference and is not a system output.
     </p>
     <div id="cats"></div>
   </section>
@@ -149,22 +149,16 @@
         + '<th>Route-DMD (Student, 4 steps)</th>'
         + '<th>Teacher (32 steps)</th>'
         + '</tr></thead><tbody>';
-      for (var i = 0; i < 2; i++) {
-        var ex = t.examples[i];
-        var instHtml;
-        if (ex) {
-          instHtml = '<div class="inst-label">' + esc(t.task) + '</div>' + ex.instruction;
-          if (ex.caption) instHtml += '<span class="caption-line">' + (ex.captionLabel ? esc(ex.captionLabel) + ' — ' : '') + ex.caption + '</span>';
-        } else {
-          instHtml = '<div class="inst-label">' + esc(t.task) + '</div><span style="color:#b0b4bb;font-style:italic">Sample to be added.</span>';
-        }
+      t.examples.forEach(function (ex) {
+        var instHtml = '<div class="inst-label">' + esc(t.task) + '</div>' + ex.instruction;
+        if (ex.caption) instHtml += '<span class="caption-line">' + (ex.captionLabel ? esc(ex.captionLabel) + ' — ' : '') + ex.caption + '</span>';
         h += '<tr>'
           + '<td class="inst-cell">' + instHtml + '</td>'
           + playerCell(ex, 'input', 'Ref')
           + playerCell(ex, 'student', '4-step')
           + playerCell(ex, 'teacher', '32-step')
           + '</tr>';
-      }
+      });
       h += '</tbody></table></div>';
     });
     sec.innerHTML = h;
