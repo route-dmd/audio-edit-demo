@@ -56,7 +56,7 @@
   }
   table.demo td { border-bottom: 1px solid var(--border); padding: 12px 10px; vertical-align: top; }
   table.demo tr:last-child td { border-bottom: none; }
-  table.demo .inst-cell { width: 32%; min-width: 240px; font-size: 13.5px; }
+  table.demo .inst-cell { width: 30%; min-width: 230px; font-size: 13.5px; }
   table.demo .inst-cell .inst-label { font-weight: 600; }
   table.demo .caption-line {
     display: block; margin-top: 6px; font-size: 12.5px; color: var(--muted);
@@ -65,11 +65,11 @@
   table.demo .task-cell { width: 34%; min-width: 220px; }
   table.demo .task-cell .p { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   table.demo .task-cell .p:last-child { margin-bottom: 0; }
-  table.demo .p .plabel { font-size: 12px; font-weight: 700; width: 64px; flex: none; }
+  table.demo .p .plabel { font-size: 12px; font-weight: 700; width: 52px; flex: none; }
   .plabel.student { color: var(--student); }
   .plabel.teacher { color: var(--teacher); }
   .plabel.input { color: var(--muted); }
-  table.demo audio { width: 100%; height: 34px; }
+  table.demo audio { width: 100%; height: 34px; min-width: 200px; }
   td.placeholder { color: #b0b4bb; font-style: italic; text-align: center; font-size: 13px; background: repeating-linear-gradient(45deg, var(--band), var(--band) 8px, #fff 8px, #fff 16px); }
   .cat-sep { border: none; border-top: 1px solid var(--border); margin: 34px 0 0; }
   mark { background: rgba(37, 99, 235, .12); color: inherit; padding: 0 2px; border-radius: 3px; }
@@ -130,9 +130,7 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
   function playerCell(ex, kind, label) {
-    if (!ex || !ex[kind]) {
-      return '<td class="placeholder">coming soon</td>';
-    }
+    if (!ex[kind]) return '';
     return '<td><div class="p"><span class="plabel ' + kind + '">' + label + '</span>'
       + '<audio controls preload="metadata" src="' + esc(ex[kind]) + '"></audio></div></td>';
   }
@@ -142,10 +140,10 @@
     var h = '<h3>' + esc(fam.family) + '</h3>'
           + '<p class="catdesc">' + esc(DESc[fam.family]) + '</p>';
     fam.tasks.forEach(function (t) {
-      var ex0 = t.examples[0] || {};
+      var hasInput = t.examples.some(function (ex) { return ex.input; });
       h += '<div class="tblwrap"><table class="demo"><thead><tr>'
         + '<th>Instruction / Text</th>'
-        + '<th>Input</th>'
+        + (hasInput ? '<th style="width:22%">Input</th>' : '')
         + '<th>Route-DMD (Student, 4 steps)</th>'
         + '<th>Teacher (32 steps)</th>'
         + '</tr></thead><tbody>';
@@ -154,7 +152,7 @@
         if (ex.caption) instHtml += '<span class="caption-line">' + (ex.captionLabel ? esc(ex.captionLabel) + ' — ' : '') + ex.caption + '</span>';
         h += '<tr>'
           + '<td class="inst-cell">' + instHtml + '</td>'
-          + playerCell(ex, 'input', 'Ref')
+          + (hasInput ? playerCell(ex, 'input', 'Ref') : '')
           + playerCell(ex, 'student', '4-step')
           + playerCell(ex, 'teacher', '32-step')
           + '</tr>';
