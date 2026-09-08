@@ -44,34 +44,34 @@
   .overview .cap { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
   .overview .cap b { color: var(--fg); }
 
-  /* demos */
+  /* demo tables */
   .cat { margin-top: 34px; }
   .cat h3 { font-size: 18px; margin: 0 0 4px; }
   .cat .catdesc { font-size: 14px; color: var(--muted); margin: 0 0 14px; }
-  .item {
-    border: 1px solid var(--border); border-radius: 10px;
-    padding: 18px 20px; margin-bottom: 14px; background: var(--band);
+  .tblwrap { overflow-x: auto; margin: 0 0 26px; }
+  table.demo { border-collapse: collapse; width: 100%; font-size: 14px; }
+  table.demo th {
+    text-align: left; font-size: 12.5px; font-weight: 700; color: var(--muted);
+    border-bottom: 2px solid var(--border); padding: 6px 10px; white-space: nowrap;
   }
-  .item .tag {
-    display: inline-block; font-size: 12px; font-weight: 600; color: var(--accent);
-    border: 1px solid var(--accent); border-radius: 4px; padding: 0 7px; margin-bottom: 8px;
+  table.demo td { border-bottom: 1px solid var(--border); padding: 12px 10px; vertical-align: top; }
+  table.demo tr:last-child td { border-bottom: none; }
+  table.demo .inst-cell { width: 30%; min-width: 220px; font-size: 13.5px; }
+  table.demo .inst-cell .inst-label { font-weight: 600; }
+  table.demo .caption-line {
+    display: block; margin-top: 6px; font-size: 12.5px; color: var(--muted);
+    background: var(--band); border-radius: 5px; padding: 5px 9px;
   }
-  .inst { margin: 0 0 4px; font-size: 15px; }
-  .inst b { font-weight: 600; }
-  .caption {
-    font-size: 14px; color: var(--muted); margin: 6px 0 0;
-    background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px;
-  }
-  .players { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-  @media (max-width: 580px) { .players { grid-template-columns: 1fr; } }
-  .player { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px 12px; }
-  .player .label { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
-  .student .label { color: var(--student); }
-  .teacher .label { color: var(--teacher); }
-  audio { width: 100%; height: 36px; }
-  .ref { margin-top: 12px; }
-  .ref .label { font-size: 12.5px; color: var(--muted); margin-bottom: 3px; font-weight: 600; }
-  .ref .player { padding: 8px 14px 10px; }
+  table.demo .task-cell { width: 34%; min-width: 220px; }
+  table.demo .task-cell .p { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  table.demo .task-cell .p:last-child { margin-bottom: 0; }
+  table.demo .p .plabel { font-size: 12px; font-weight: 700; width: 64px; flex: none; }
+  .plabel.student { color: var(--student); }
+  .plabel.teacher { color: var(--teacher); }
+  .plabel.input { color: var(--muted); }
+  table.demo audio { width: 100%; height: 34px; }
+  td.placeholder { color: #b0b4bb; font-style: italic; text-align: center; font-size: 13px; background: repeating-linear-gradient(45deg, var(--band), var(--band) 8px, #fff 8px, #fff 16px); }
+  .cat-sep { border: none; border-top: 1px solid var(--border); margin: 34px 0 0; }
   mark { background: rgba(37, 99, 235, .12); color: inherit; padding: 0 2px; border-radius: 3px; }
   .tr-chg s { opacity: .55; }
 
@@ -129,21 +129,43 @@
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-  Object.keys(DEMO_DATA).forEach(function (cat, ci) {
+  function playerCell(ex, kind, label) {
+    if (!ex || !ex[kind]) {
+      return '<td class="placeholder">coming soon</td>';
+    }
+    return '<td><div class="p"><span class="plabel ' + kind + '">' + label + '</span>'
+      + '<audio controls preload="none" src="' + esc(ex[kind]) + '"></audio></div></td>';
+  }
+  DEMO_DATA.forEach(function (cat) {
     var sec = document.createElement('div');
     sec.className = 'cat';
-    var h = '<h3>' + esc(ci + 1) + '. ' + esc(cat) + '</h3>'
-          + '<p class="catdesc">' + esc(DESc[cat]) + '</p>';
-    DEMO_DATA[cat].forEach(function (it, i) {
-      h += '<div class="item">'
-        + '<div class="tag">' + esc(it.task) + '</div>'
-        + '<p class="inst"><b>Instruction:</b> ' + it.instruction + '</p>';
-      if (it.caption) h += '<div class="caption">' + (it.captionLabel ? esc(it.captionLabel) + ' — ' : '') + it.caption + '</div>';
-      if (it.input) h += '<div class="ref"><div class="player"><div class="label">Input (reference)</div><audio controls preload="none" src="' + esc(it.input) + '"></audio></div></div>';
-      h += '<div class="players">'
-        + '<div class="player student"><div class="label">Student (4 steps)</div><audio controls preload="none" src="' + esc(it.student) + '"></audio></div>'
-        + '<div class="player teacher"><div class="label">Teacher (32 steps)</div><audio controls preload="none" src="' + esc(it.teacher) + '"></audio></div>'
-        + '</div></div>';
+    var h = '<h3>' + esc(cat.category) + '</h3>'
+          + '<p class="catdesc">' + esc(DESc[cat.category]) + '</p>';
+    cat.tasks.forEach(function (t) {
+      var ex0 = t.examples[0] || {};
+      h += '<div class="tblwrap"><table class="demo"><thead><tr>'
+        + '<th>Instruction / Text</th>'
+        + '<th>Input</th>'
+        + '<th>Route-DMD (Student, 4 steps)</th>'
+        + '<th>Teacher (32 steps)</th>'
+        + '</tr></thead><tbody>';
+      for (var i = 0; i < 2; i++) {
+        var ex = t.examples[i];
+        var instHtml;
+        if (ex) {
+          instHtml = '<div class="inst-label">' + esc(t.task) + '</div>' + ex.instruction;
+          if (ex.caption) instHtml += '<span class="caption-line">' + (ex.captionLabel ? esc(ex.captionLabel) + ' — ' : '') + ex.caption + '</span>';
+        } else {
+          instHtml = '<div class="inst-label">' + esc(t.task) + '</div><span style="color:#b0b4bb;font-style:italic">Sample to be added.</span>';
+        }
+        h += '<tr>'
+          + '<td class="inst-cell">' + instHtml + '</td>'
+          + playerCell(ex, 'input', 'Ref')
+          + playerCell(ex, 'student', '4-step')
+          + playerCell(ex, 'teacher', '32-step')
+          + '</tr>';
+      }
+      h += '</tbody></table></div>';
     });
     sec.innerHTML = h;
     root.appendChild(sec);
