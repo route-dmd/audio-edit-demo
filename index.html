@@ -16,15 +16,15 @@
     margin: 0; background: var(--bg); color: var(--fg);
     font: 16px/1.65 "Source Sans 3", "Source Sans Pro", -apple-system, "Segoe UI", "PingFang SC", sans-serif;
   }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px 90px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px 90px; }
 
   /* hero */
   header { padding: 70px 0 34px; text-align: center; }
-  header h1 { font-size: 32px; margin: 0 0 14px; line-height: 1.25; }
-  header h1 .sub { display: block; font-size: 21px; font-weight: 600; color: var(--fg); margin-top: 6px; }
-  .authors { font-size: 15px; color: var(--fg); margin: 0 auto 6px; max-width: 720px; }
+  header h1 { font-size: 34px; margin: 0 0 14px; line-height: 1.25; }
+  header h1 .sub { display: block; font-size: 22px; font-weight: 600; color: var(--fg); margin-top: 6px; }
+  .authors { font-size: 15px; color: var(--fg); margin: 0 auto 6px; max-width: 900px; }
   .authors sup { color: var(--accent); }
-  .affil { font-size: 13.5px; color: var(--muted); margin: 0 auto 24px; max-width: 760px; }
+  .affil { font-size: 13.5px; color: var(--muted); margin: 0 auto 24px; max-width: 900px; }
   .btns { display: flex; gap: 10px; justify-content: center; }
   .btn {
     display: inline-flex; align-items: center; gap: 7px;
@@ -37,7 +37,7 @@
   /* sections */
   section { margin-top: 56px; }
   h2 { font-size: 24px; margin: 0 0 18px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-  .abstract { font-size: 16px; color: #333; }
+  .abstract { font-size: 16px; color: #333; max-width: 1000px; margin: 0 auto; }
   .abstract b { color: var(--fg); }
 
   .overview img { width: 100%; border: 1px solid var(--border); border-radius: 8px; }
@@ -56,7 +56,7 @@
   }
   table.demo td { border-bottom: 1px solid var(--border); padding: 12px 10px; vertical-align: top; }
   table.demo tr:last-child td { border-bottom: none; }
-  table.demo .inst-cell { width: 30%; min-width: 220px; font-size: 13.5px; }
+  table.demo .inst-cell { width: 32%; min-width: 240px; font-size: 13.5px; }
   table.demo .inst-cell .inst-label { font-weight: 600; }
   table.demo .caption-line {
     display: block; margin-top: 6px; font-size: 12.5px; color: var(--muted);
@@ -106,8 +106,8 @@
   <section id="demos">
     <h2>Demos</h2>
     <p style="color:var(--muted);font-size:15px;margin-top:0">
-      Student (4-step Route-DMD) vs. 32-step teacher across 16 instructions in five task families.
-      The input audio is shown for reference and is not a system output.
+      Student (4-step Route-DMD) vs. 32-step teacher across 16 task types. The input audio is shown
+      for reference and is not a system output. Samples marked "coming soon" are being prepared.
     </p>
     <div id="cats"></div>
   </section>
@@ -119,11 +119,11 @@
 <script>
 (function () {
   var DESc = {
-    'Speech Generation': 'Zero-shot and instruct TTS: clone a voice or follow a voice description.',
-    'Content Editing': 'Insert, replace, or rewrite the spoken content while keeping the voice.',
-    'Paralinguistic Editing': 'Edit emotion, style, and non-verbal attributes without changing the text.',
-    'Acoustic Editing': 'Edit speed and accent while preserving content and speaker identity.',
-    'Enhancement & Separation': 'Denoise speech or extract a target speaker / vocal track from a mixture.'
+    'Text-to-Speech': 'Zero-shot voice cloning and instruction-following voice creation.',
+    'Content Editing': 'Insert, replace, or rewrite the spoken content or lyrics while keeping the voice.',
+    'Paralinguistic Editing': 'Edit timbre, emotion, non-verbal sounds, and whisper style without changing the text.',
+    'Acoustic Editing': 'Edit speed, pitch, energy, and accent while preserving content and speaker identity.',
+    'Enhancement and Separation': 'Denoise, restore quality, or extract a target speaker / vocal track from a mixture.'
   };
   var root = document.getElementById('cats');
   function esc(s) {
@@ -136,12 +136,12 @@
     return '<td><div class="p"><span class="plabel ' + kind + '">' + label + '</span>'
       + '<audio controls preload="none" src="' + esc(ex[kind]) + '"></audio></div></td>';
   }
-  DEMO_DATA.forEach(function (cat) {
+  DEMO_DATA.forEach(function (fam) {
     var sec = document.createElement('div');
     sec.className = 'cat';
-    var h = '<h3>' + esc(cat.category) + '</h3>'
-          + '<p class="catdesc">' + esc(DESc[cat.category]) + '</p>';
-    cat.tasks.forEach(function (t) {
+    var h = '<h3>' + esc(fam.family) + '</h3>'
+          + '<p class="catdesc">' + esc(DESc[fam.family]) + '</p>';
+    fam.tasks.forEach(function (t) {
       var ex0 = t.examples[0] || {};
       h += '<div class="tblwrap"><table class="demo"><thead><tr>'
         + '<th>Instruction / Text</th>'
