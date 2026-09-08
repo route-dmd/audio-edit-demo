@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audio Editing Demo</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fafafa; --fg: #1a1a1a; --muted: #6b7280;
+    --border: #e5e7eb; --card: #ffffff;
+    --student: #2563eb; --teacher: #16a34a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #111113; --fg: #e8e8ea; --muted: #9ca3af; --border: #2a2a2e; --card: #1a1a1d; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 15px/1.6 -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 48px 20px 80px; }
+  header h1 { font-size: 22px; margin: 0 0 4px; }
+  header p { color: var(--muted); margin: 0 0 36px; font-size: 14px; }
+  .item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 22px; margin-bottom: 20px;
+  }
+  .item h2 { font-size: 15px; margin: 0 0 10px; }
+  .task {
+    display: inline-block; font-size: 12px; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 4px; padding: 1px 8px; margin-right: 8px;
+  }
+  .inst { margin: 0 0 6px; }
+  .inst b { font-weight: 600; }
+  .inst .q { color: var(--fg); }
+  .caption {
+    font-size: 13px; color: var(--muted); margin: 0 0 6px;
+    background: var(--bg); border-radius: 6px; padding: 8px 12px;
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+  .player { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .player .label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .student .label { color: var(--student); }
+  .teacher .label { color: var(--teacher); }
+  audio { width: 100%; height: 36px; }
+  .ref { margin-top: 14px; }
+  .ref .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  mark { background: rgba(37, 99, 235, .15); color: inherit; padding: 0 2px; border-radius: 3px; }
+  .tr-chg s { opacity: .6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Audio Editing Demo</h1>
+    <p>16 个编辑任务 · Student vs Teacher · 输入音频仅供参考</p>
+  </header>
+  <div id="items"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  var root = document.getElementById('items');
+  DEMO_ITEMS.forEach(function (it, i) {
+    var el = document.createElement('section');
+    el.className = 'item';
+    var h = '<h2><span class="task">' + esc(it.task) + '</span>Item ' + (i + 1) + '</h2>';
+    h += '<p class="inst"><b>指令：</b><span class="q">' + it.instruction + '</span></p>';
+    if (it.caption) h += '<div class="caption">' + (it.captionLabel ? esc(it.captionLabel) + ' — ' : '') + it.caption + '</div>';
+    if (it.input) h += '<div class="ref"><div class="label">输入音频 (Input)</div><audio controls preload="none" src="' + esc(it.input) + '"></audio></div>';
+    h += '<div class="row">'
+      + '<div class="player student"><div class="label">Student</div><audio controls preload="none" src="' + esc(it.student) + '"></audio></div>'
+      + '<div class="player teacher"><div class="label">Teacher</div><audio controls preload="none" src="' + esc(it.teacher) + '"></audio></div>'
+      + '</div>';
+    el.innerHTML = h;
+    root.appendChild(el);
+  });
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+})();
+</script>
+</body>
+</html>
