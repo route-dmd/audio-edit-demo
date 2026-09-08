@@ -1,86 +1,153 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Audio Editing Demo</title>
+<title>Route-DMD Demo</title>
 <style>
   :root {
-    color-scheme: light dark;
-    --bg: #fafafa; --fg: #1a1a1a; --muted: #6b7280;
-    --border: #e5e7eb; --card: #ffffff;
+    color-scheme: light;
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #6b7280;
+    --border: #e5e7eb; --accent: #2563eb; --band: #f7f8fa;
     --student: #2563eb; --teacher: #16a34a;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #111113; --fg: #e8e8ea; --muted: #9ca3af; --border: #2a2a2e; --card: #1a1a1d; }
   }
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--bg); color: var(--fg);
-    font: 15px/1.6 -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    font: 16px/1.65 "Source Sans 3", "Source Sans Pro", -apple-system, "Segoe UI", "PingFang SC", sans-serif;
   }
-  .wrap { max-width: 780px; margin: 0 auto; padding: 48px 20px 80px; }
-  header h1 { font-size: 22px; margin: 0 0 4px; }
-  header p { color: var(--muted); margin: 0 0 36px; font-size: 14px; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px 90px; }
+
+  /* hero */
+  header { padding: 70px 0 34px; text-align: center; }
+  header h1 { font-size: 32px; margin: 0 0 14px; line-height: 1.25; }
+  header h1 .sub { display: block; font-size: 21px; font-weight: 600; color: var(--fg); margin-top: 6px; }
+  .authors { font-size: 15px; color: var(--fg); margin: 0 auto 6px; max-width: 720px; }
+  .authors sup { color: var(--accent); }
+  .affil { font-size: 13.5px; color: var(--muted); margin: 0 auto 24px; max-width: 760px; }
+  .btns { display: flex; gap: 10px; justify-content: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--accent); color: #fff; text-decoration: none;
+    font-size: 14.5px; font-weight: 600; padding: 8px 18px; border-radius: 24px;
+    border: 1px solid var(--accent);
+  }
+  .btn.ghost { background: transparent; color: var(--accent); }
+
+  /* sections */
+  section { margin-top: 56px; }
+  h2 { font-size: 24px; margin: 0 0 18px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .abstract { font-size: 16px; color: #333; }
+  .abstract b { color: var(--fg); }
+
+  .overview img { width: 100%; border: 1px solid var(--border); border-radius: 8px; }
+  .overview .cap { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
+  .overview .cap b { color: var(--fg); }
+
+  /* demos */
+  .cat { margin-top: 34px; }
+  .cat h3 { font-size: 18px; margin: 0 0 4px; }
+  .cat .catdesc { font-size: 14px; color: var(--muted); margin: 0 0 14px; }
   .item {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 20px 22px; margin-bottom: 20px;
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px; margin-bottom: 14px; background: var(--band);
   }
-  .item h2 { font-size: 15px; margin: 0 0 10px; }
-  .task {
-    display: inline-block; font-size: 12px; color: var(--muted);
-    border: 1px solid var(--border); border-radius: 4px; padding: 1px 8px; margin-right: 8px;
+  .item .tag {
+    display: inline-block; font-size: 12px; font-weight: 600; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 4px; padding: 0 7px; margin-bottom: 8px;
   }
-  .inst { margin: 0 0 6px; }
+  .inst { margin: 0 0 4px; font-size: 15px; }
   .inst b { font-weight: 600; }
-  .inst .q { color: var(--fg); }
   .caption {
-    font-size: 13px; color: var(--muted); margin: 0 0 6px;
-    background: var(--bg); border-radius: 6px; padding: 8px 12px;
+    font-size: 14px; color: var(--muted); margin: 6px 0 0;
+    background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px;
   }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
-  .player { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
-  .player .label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .players { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  @media (max-width: 580px) { .players { grid-template-columns: 1fr; } }
+  .player { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px 12px; }
+  .player .label { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
   .student .label { color: var(--student); }
   .teacher .label { color: var(--teacher); }
   audio { width: 100%; height: 36px; }
-  .ref { margin-top: 14px; }
-  .ref .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  mark { background: rgba(37, 99, 235, .15); color: inherit; padding: 0 2px; border-radius: 3px; }
-  .tr-chg s { opacity: .6; }
+  .ref { margin-top: 12px; }
+  .ref .label { font-size: 12.5px; color: var(--muted); margin-bottom: 3px; font-weight: 600; }
+  .ref .player { padding: 8px 14px 10px; }
+  mark { background: rgba(37, 99, 235, .12); color: inherit; padding: 0 2px; border-radius: 3px; }
+  .tr-chg s { opacity: .55; }
+
+  footer { margin-top: 70px; padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--muted); text-align: center; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <header>
-    <h1>Audio Editing Demo</h1>
-    <p>16 个编辑任务 · Student vs Teacher · 输入音频仅供参考</p>
+    <h1>Route-DMD<span class="sub">Distribution Matching Distillation with Task-Routed Mechanism for Unified Speech Model</span></h1>
+    <p class="authors">Yanru Huo<sup>1,2</sup>, Zhikang Niu<sup>1,3</sup>, Wenming Tu<sup>1,2</sup>, Ziyang Ma<sup>1,3</sup>, Junxi Liu<sup>1,3</sup>, Tian Tan<sup>1</sup>, Shan Yang<sup>4</sup>, Xie Chen<sup>1,3,*</sup>, Zilong Zheng<sup>2,*</sup></p>
+    <p class="affil"><sup>1</sup> X-LANCE Lab, MoE Key Lab of Artificial Intelligence, Shanghai Jiao Tong University &nbsp;&middot;&nbsp; <sup>2</sup> State Key Laboratory of General Artificial Intelligence, BIGAI &nbsp;&middot;&nbsp; <sup>3</sup> Shanghai Innovation Institute &nbsp;&middot;&nbsp; <sup>4</sup> Tencent Hunyuan<br><sup>*</sup> Corresponding authors</p>
+    <div class="btns">
+      <a class="btn" href="#demos">Audio Demos</a>
+      <a class="btn ghost" href="#">Paper</a>
+    </div>
   </header>
-  <div id="items"></div>
+
+  <section>
+    <h2>Abstract</h2>
+    <p class="abstract">Large-scale unified speech foundation models address diverse tasks, including text-to-speech (TTS) synthesis and speech editing. However, iterative flow-matching sampling and the overhead of classifier-free guidance (CFG) make inference expensive. Distribution matching distillation (DMD) approximates teacher quality in far fewer steps, but applying it to a unified multi-task model causes severe capability degradation, and existing speech distillation methods are evaluated only on generation tasks. We propose <b>RoutingDMD</b>, which assigns each class of tasks a dedicated objective: separation tasks are trained with a clean-endpoint regression loss on the ground-truth latent, while other tasks use the decoupled distribution-matching objective. The student is first initialized with consistency distillation, and CFG is replaced with adaptive projected guidance (APG) in teacher rollouts to suppress clipping artifacts. With four inference steps, the student matches the 32-step teacher and surpasses it on several tasks with a $4.5\times$ end-to-end speedup, without sacrificing task coverage.</p>
+  </section>
+
+  <section class="overview">
+    <h2>Model Overview</h2>
+    <img src="overview.png" alt="Route-DMD overview">
+    <p class="cap"><b>Overview of Route-DMD.</b> <b>Stage 1</b> uses consistency initialization for few-step endpoint prediction. <b>Stage 2</b> routes separation samples to clean-endpoint regression and other samples to Decoupled DMD.</p>
+  </section>
+
+  <section id="demos">
+    <h2>Demos</h2>
+    <p style="color:var(--muted);font-size:15px;margin-top:0">
+      Student (4-step Route-DMD) vs. 32-step teacher across 16 instructions in five task families.
+      The input audio is shown for reference and is not a system output.
+    </p>
+    <div id="cats"></div>
+  </section>
+
+  <footer>Audio samples are provided for research demonstration.</footer>
 </div>
 
 <script src="data.js"></script>
 <script>
 (function () {
-  var root = document.getElementById('items');
-  DEMO_ITEMS.forEach(function (it, i) {
-    var el = document.createElement('section');
-    el.className = 'item';
-    var h = '<h2><span class="task">' + esc(it.task) + '</span>Item ' + (i + 1) + '</h2>';
-    h += '<p class="inst"><b>指令：</b><span class="q">' + it.instruction + '</span></p>';
-    if (it.caption) h += '<div class="caption">' + (it.captionLabel ? esc(it.captionLabel) + ' — ' : '') + it.caption + '</div>';
-    if (it.input) h += '<div class="ref"><div class="label">输入音频 (Input)</div><audio controls preload="none" src="' + esc(it.input) + '"></audio></div>';
-    h += '<div class="row">'
-      + '<div class="player student"><div class="label">Student</div><audio controls preload="none" src="' + esc(it.student) + '"></audio></div>'
-      + '<div class="player teacher"><div class="label">Teacher</div><audio controls preload="none" src="' + esc(it.teacher) + '"></audio></div>'
-      + '</div>';
-    el.innerHTML = h;
-    root.appendChild(el);
-  });
+  var DESc = {
+    'Speech Generation': 'Zero-shot and instruct TTS: clone a voice or follow a voice description.',
+    'Content Editing': 'Insert, replace, or rewrite the spoken content while keeping the voice.',
+    'Paralinguistic Editing': 'Edit emotion, style, and non-verbal attributes without changing the text.',
+    'Acoustic Editing': 'Edit speed and accent while preserving content and speaker identity.',
+    'Enhancement & Separation': 'Denoise speech or extract a target speaker / vocal track from a mixture.'
+  };
+  var root = document.getElementById('cats');
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+  Object.keys(DEMO_DATA).forEach(function (cat, ci) {
+    var sec = document.createElement('div');
+    sec.className = 'cat';
+    var h = '<h3>' + esc(ci + 1) + '. ' + esc(cat) + '</h3>'
+          + '<p class="catdesc">' + esc(DESc[cat]) + '</p>';
+    DEMO_DATA[cat].forEach(function (it, i) {
+      h += '<div class="item">'
+        + '<div class="tag">' + esc(it.task) + '</div>'
+        + '<p class="inst"><b>Instruction:</b> ' + it.instruction + '</p>';
+      if (it.caption) h += '<div class="caption">' + (it.captionLabel ? esc(it.captionLabel) + ' — ' : '') + it.caption + '</div>';
+      if (it.input) h += '<div class="ref"><div class="player"><div class="label">Input (reference)</div><audio controls preload="none" src="' + esc(it.input) + '"></audio></div></div>';
+      h += '<div class="players">'
+        + '<div class="player student"><div class="label">Student (4 steps)</div><audio controls preload="none" src="' + esc(it.student) + '"></audio></div>'
+        + '<div class="player teacher"><div class="label">Teacher (32 steps)</div><audio controls preload="none" src="' + esc(it.teacher) + '"></audio></div>'
+        + '</div></div>';
+    });
+    sec.innerHTML = h;
+    root.appendChild(sec);
+  });
 })();
 </script>
 </body>
