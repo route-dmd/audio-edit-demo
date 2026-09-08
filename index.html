@@ -134,7 +134,7 @@
       return '<td class="placeholder">coming soon</td>';
     }
     return '<td><div class="p"><span class="plabel ' + kind + '">' + label + '</span>'
-      + '<audio controls preload="none" src="' + esc(ex[kind]) + '"></audio></div></td>';
+      + '<audio controls preload="metadata" src="' + esc(ex[kind]) + '"></audio></div></td>';
   }
   DEMO_DATA.forEach(function (fam) {
     var sec = document.createElement('div');
